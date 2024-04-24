@@ -13,6 +13,9 @@ import (
 	"github.com/pocketbase/pocketbase/plugins/ghupdate"
 	"github.com/pocketbase/pocketbase/plugins/jsvm"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
+	"github.com/labstack/echo/v5"
+	"github.com/webteleport/utils"
+	"github.com/webteleport/relay"
 )
 
 func main() {
@@ -116,8 +119,15 @@ func main() {
 	})
 
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		// serves static files from the provided public dir (if exists)
-		e.Router.GET("/*", apis.StaticDirectoryHandler(os.DirFS(publicDir), indexFallback))
+		host := utils.EnvHost("localhost")
+		app.Logger().Info("starting the relay server", "HOST", host)
+		store := relay.NewSessionStore()
+		mini := relay.NewWSServer(host, store)
+		e.Router.Any("/*", func(c echo.Context) error {
+			mini.ServeHTTP(c.Response(), c.Request())
+			apis.LogRequest(app, c, nil)
+			return nil
+		})
 		return nil
 	})
 
