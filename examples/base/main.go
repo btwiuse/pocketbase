@@ -2,20 +2,22 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/pocketbase/pocketbase"
+	// "github.com/pocketbase/pocketbase/apis"
+	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/ghupdate"
 	"github.com/pocketbase/pocketbase/plugins/jsvm"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
-	"github.com/labstack/echo/v5"
-	"github.com/webteleport/utils"
 	"github.com/webteleport/relay"
+	"github.com/webteleport/utils"
 )
 
 func main() {
@@ -123,11 +125,22 @@ func main() {
 		app.Logger().Info("starting the relay server", "HOST", host)
 		store := relay.NewSessionStore()
 		mini := relay.NewWSServer(host, store)
-		e.Router.Any("/*", func(c echo.Context) error {
-			mini.ServeHTTP(c.Response(), c.Request())
-			apis.LogRequest(app, c, nil)
-			return nil
-		})
+
+		pre := func(next http.Handler) http.Handler {
+			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if mini.IsRoot(r) && (strings.HasPrefix(r.URL.Path, "/_/") || strings.HasPrefix(r.URL.Path, "/api/")) {
+					next.ServeHTTP(w, r)
+					return
+				}
+				println("pre", r.Method, r.Host, r.URL.Path)
+				mini.ServeHTTP(w, r)
+			})
+		}
+
+		e.Router.Pre(
+			apis.ActivityLogger(app),
+			echo.WrapMiddleware(pre),
+		)
 		return nil
 	})
 

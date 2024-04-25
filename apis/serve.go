@@ -159,6 +159,8 @@ func Serve(app core.App, config ServeConfig) (*http.Server, error) {
 		BaseContext: func(l net.Listener) context.Context {
 			return baseCtx
 		},
+		// Disable automatic HTTP/2.
+		TLSNextProto: map[string]func(*http.Server, *tls.Conn, http.Handler){},
 	}
 
 	serveEvent := &core.ServeEvent{
@@ -227,8 +229,33 @@ func Serve(app core.App, config ServeConfig) (*http.Server, error) {
 	defer wg.Wait()
 
 	if true {
+		LocalTLSConfig := func(certFile, keyFile string) *tls.Config {
+			GetCertificate := func(*tls.ClientHelloInfo) (*tls.Certificate, error) {
+				// Always get latest localhost.crt and localhost.key
+				cert, err := tls.LoadX509KeyPair(certFile, keyFile)
+				if err != nil {
+					return nil, err
+				}
+				return &cert, nil
+			}
+			return &tls.Config{
+				GetCertificate: GetCertificate,
+				NextProtos:     []string{"http/1.1"},
+			}
+		}
 		if HTTPS_PORT != nil {
-			go log.Fatalln(http.ListenAndServeTLS(*HTTPS_PORT, CERT, KEY, router))
+			tlsConfig := LocalTLSConfig(CERT, KEY)
+			ln, err := tls.Listen("tcp4", *HTTPS_PORT, tlsConfig)
+			if err != nil {
+				println(err.Error())
+				return nil, err
+			}
+			go func() {
+				err := http.Serve(ln, router)
+				if err != nil {
+					println(err.Error())
+				}
+			}()
 		}
 
 		return server, http.ListenAndServe(PORT, router)

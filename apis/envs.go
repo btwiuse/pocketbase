@@ -12,4 +12,3 @@ var (
 	HTTPS_PORT = utils.LookupEnvPort("HTTPS_PORT")
 	ALT_SVC    = utils.EnvAltSvc("")
 )
-
