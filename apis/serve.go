@@ -22,6 +22,7 @@ import (
 	"github.com/pocketbase/pocketbase/tools/migrate"
 	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"
+	"github.com/webteleport/relay"
 )
 
 // ServeConfig defines a configuration struct for apis.Serve().
@@ -227,11 +228,35 @@ func Serve(app core.App, config ServeConfig) (*http.Server, error) {
 	defer wg.Wait()
 
 	if true {
+		// relay server
+		store := relay.NewSessionStore()
+		mini := relay.NewWSServer(HOST, store)
+
+		mux := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.Host == HOST && (strings.HasPrefix(r.URL.Path, "/_/") || strings.HasPrefix(r.URL.Path, "/api/")) {
+				router.ServeHTTP(w, r)
+			} else {
+				mini.ServeHTTP(w, r)
+			}
+		})
+
 		if HTTPS_PORT != nil {
-			go log.Fatalln(http.ListenAndServeTLS(*HTTPS_PORT, CERT, KEY, router))
+			println(*HTTPS_PORT)
+			go func() {
+				http.ListenAndServeTLS(*HTTPS_PORT, CERT, KEY, mux)
+				if err != nil {
+					println(err.Error())
+				}
+			}()
 		}
 
-		return server, http.ListenAndServe(PORT, router)
+		println(PORT)
+		err := http.ListenAndServe(PORT, mux)
+		if err != nil {
+			println(err.Error())
+		}
+		select {}
+		return server, err
 	}
 
 	// ---

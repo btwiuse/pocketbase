@@ -8,14 +8,11 @@ import (
 	"time"
 
 	"github.com/pocketbase/pocketbase"
-	"github.com/pocketbase/pocketbase/apis"
+	// "github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/ghupdate"
 	"github.com/pocketbase/pocketbase/plugins/jsvm"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
-	"github.com/labstack/echo/v5"
-	"github.com/webteleport/utils"
-	"github.com/webteleport/relay"
 )
 
 func main() {
@@ -115,19 +112,6 @@ func main() {
 
 	app.OnAfterBootstrap().PreAdd(func(e *core.BootstrapEvent) error {
 		app.Dao().ModelQueryTimeout = time.Duration(queryTimeout) * time.Second
-		return nil
-	})
-
-	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		host := utils.EnvHost("localhost")
-		app.Logger().Info("starting the relay server", "HOST", host)
-		store := relay.NewSessionStore()
-		mini := relay.NewWSServer(host, store)
-		e.Router.Any("/*", func(c echo.Context) error {
-			mini.ServeHTTP(c.Response(), c.Request())
-			apis.LogRequest(app, c, nil)
-			return nil
-		})
 		return nil
 	})
 
