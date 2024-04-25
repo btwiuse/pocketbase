@@ -132,7 +132,6 @@ func main() {
 					next.ServeHTTP(w, r)
 					return
 				}
-				println("pre", r.Method, r.Host, r.URL.Path)
 				mini.ServeHTTP(w, r)
 			})
 		}

@@ -66,7 +66,6 @@ func InitApi(app core.App) (*echo.Echo, error) {
 			if err == nil {
 				return // no error
 			}
-			println(err.Error())
 
 			var apiErr *ApiError
 
