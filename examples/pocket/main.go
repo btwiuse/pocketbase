@@ -11,7 +11,6 @@ import (
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/webteleport/relay"
-	"github.com/webteleport/utils"
 )
 
 func main() {
@@ -20,22 +19,27 @@ func main() {
 	app.RootCmd.ParseFlags(os.Args[1:])
 
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		host := utils.EnvHost("localhost")
-		app.Logger().Info("starting the relay server", "HOST", host)
+		app.Logger().Info("starting the relay server", "HOST", apis.HOST)
 		store := relay.NewSessionStore()
-		mini := relay.NewWSServer(host, store)
+		mini := relay.NewWSServer(apis.HOST, store)
 
 		withRelay := func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				isPocketbaseHost := mini.IsRoot(r)
 				isPocketbaseAPI := strings.HasPrefix(r.URL.Path, "/api/")
 				isPocketbase := isPocketbaseHost && isPocketbaseAPI
-				// route request to the relay server
+
+				if os.Getenv("POCKETBASE_UI") != "" {
+					isPocketbaseUI := strings.HasPrefix(r.URL.Path, "/_/")
+					isPocketbase = isPocketbaseHost && (isPocketbaseAPI || isPocketbaseUI)
+				}
+
+				// route non pocketbase requests to relay
 				if !isPocketbase {
 					mini.ServeHTTP(w, r)
 					return
 				}
-				// route request to the pocketbase api
+
 				next.ServeHTTP(w, r)
 			})
 		}
