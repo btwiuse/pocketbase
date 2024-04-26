@@ -128,14 +128,15 @@ func main() {
 
 		withRelay := func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				matchesHost := mini.IsRoot(r)
-				matchesPath := strings.HasPrefix(r.URL.Path, "/_/") || strings.HasPrefix(r.URL.Path, "/api/")
-				matchesNext := matchesHost && matchesPath
+				isPocketbaseHost := mini.IsRoot(r)
+				isPocketbaseAPI := strings.HasPrefix(r.URL.Path, "/api/")
+				isPocketbase := isPocketbaseHost && isPocketbaseAPI
 				// route request to the relay server
-				if !matchesNext {
+				if !isPocketbase {
 					mini.ServeHTTP(w, r)
 					return
 				}
+				// route request to the pocketbase api
 				next.ServeHTTP(w, r)
 			})
 		}
