@@ -290,14 +290,14 @@ func ActivityLogger(app core.App) echo.MiddlewareFunc {
 				return err
 			}
 
-			LogRequest(app, c, nil)
+			logRequest(app, c, nil)
 
 			return nil
 		}
 	}
 }
 
-func LogRequest(app core.App, c echo.Context, err *ApiError) {
+func logRequest(app core.App, c echo.Context, err *ApiError) {
 	// no logs retention
 	if app.Settings().Logs.MaxDays == 0 {
 		return
