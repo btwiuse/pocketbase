@@ -18,6 +18,10 @@ var (
 	ALT_SVC    = utils.EnvAltSvc("")
 )
 
+// disable HTTP/2, because http.Hijacker is not supported,
+// which is required by https://github.com/elazarl/goproxy
+var NextProtos = []string{"http/1.1"}
+
 func LocalTLSConfig(certFile, keyFile string) *tls.Config {
 	GetCertificate := func(*tls.ClientHelloInfo) (*tls.Certificate, error) {
 		// Always get latest localhost.crt and localhost.key
@@ -29,7 +33,7 @@ func LocalTLSConfig(certFile, keyFile string) *tls.Config {
 	}
 	return &tls.Config{
 		GetCertificate: GetCertificate,
-		NextProtos:     []string{"http/1.1"},
+		NextProtos:     NextProtos,
 	}
 }
 
