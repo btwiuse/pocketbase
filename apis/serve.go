@@ -272,7 +272,6 @@ func Serve(app core.App, config ServeConfig) error {
 		}
 	}()
 
-	var serveErr error
 	if config.HttpsAddr != "" {
 		if config.HttpAddr != "" {
 			// start an additional HTTP server for redirecting the traffic to the HTTPS version
@@ -283,7 +282,7 @@ func Serve(app core.App, config ServeConfig) error {
 		serveErr = server.ServeTLS(listener, "", "")
 	} else {
 		// OR start HTTP server
-		serveErr = server.Serve(listener)
+		serveErr = ListenAndServe(server.Listener)
 	}
 	if serveErr != nil && !errors.Is(serveErr, http.ErrServerClosed) {
 		return serveErr
