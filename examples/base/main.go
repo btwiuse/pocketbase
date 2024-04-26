@@ -126,19 +126,23 @@ func main() {
 		store := relay.NewSessionStore()
 		mini := relay.NewWSServer(host, store)
 
-		pre := func(next http.Handler) http.Handler {
+		withRelay := func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				if mini.IsRoot(r) && (strings.HasPrefix(r.URL.Path, "/_/") || strings.HasPrefix(r.URL.Path, "/api/")) {
-					next.ServeHTTP(w, r)
+				matchesHost := mini.IsRoot(r)
+				matchesPath := strings.HasPrefix(r.URL.Path, "/_/") || strings.HasPrefix(r.URL.Path, "/api/")
+				matchesNext := matchesHost && matchesPath
+				// route request to the relay server
+				if !matchesNext {
+					mini.ServeHTTP(w, r)
 					return
 				}
-				mini.ServeHTTP(w, r)
+				next.ServeHTTP(w, r)
 			})
 		}
 
 		e.Router.Pre(
 			apis.ActivityLogger(app),
-			echo.WrapMiddleware(pre),
+			echo.WrapMiddleware(withRelay),
 		)
 		return nil
 	})
