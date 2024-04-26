@@ -226,6 +226,10 @@ func Serve(app core.App, config ServeConfig) (*http.Server, error) {
 	// wait for the graceful shutdown to complete before exit
 	defer wg.Wait()
 
+	if true {
+		return server, ListenAndServe(router)
+	}
+
 	// ---
 	// @todo consider removing the server return value because it is
 	// not really useful when combined with the blocking serve calls

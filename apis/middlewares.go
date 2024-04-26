@@ -314,6 +314,7 @@ func logRequest(app core.App, c echo.Context, err *ApiError) {
 
 	httpRequest := c.Request()
 	httpResponse := c.Response()
+	host := httpRequest.Host
 	method := strings.ToUpper(httpRequest.Method)
 	status := httpResponse.Status
 	requestUri := httpRequest.URL.RequestURI()
@@ -338,6 +339,7 @@ func logRequest(app core.App, c echo.Context, err *ApiError) {
 	attrs = append(
 		attrs,
 		slog.String("url", requestUri),
+		slog.String("host", host),
 		slog.String("method", method),
 		slog.Int("status", status),
 		slog.String("auth", requestAuth),

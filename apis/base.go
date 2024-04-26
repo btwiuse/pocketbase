@@ -2,11 +2,9 @@
 package apis
 
 import (
-	"database/sql"
 	"errors"
 	"fmt"
 	"io/fs"
-	"log/slog"
 	"net/http"
 	"net/url"
 	"path/filepath"
@@ -59,60 +57,6 @@ func InitApi(app core.App) (*echo.Echo, error) {
 		}
 	})
 
-	// custom error handler
-	e.HTTPErrorHandler = func(c echo.Context, err error) {
-		if err == nil {
-			return // no error
-		}
-
-		var apiErr *ApiError
-
-		if errors.As(err, &apiErr) {
-			// already an api error...
-		} else if v := new(echo.HTTPError); errors.As(err, &v) {
-			msg := fmt.Sprintf("%v", v.Message)
-			apiErr = NewApiError(v.Code, msg, v)
-		} else {
-			if errors.Is(err, sql.ErrNoRows) {
-				apiErr = NewNotFoundError("", err)
-			} else {
-				apiErr = NewBadRequestError("", err)
-			}
-		}
-
-		logRequest(app, c, apiErr)
-
-		if c.Response().Committed {
-			return // already committed
-		}
-
-		event := new(core.ApiErrorEvent)
-		event.HttpContext = c
-		event.Error = apiErr
-
-		// send error response
-		hookErr := app.OnBeforeApiError().Trigger(event, func(e *core.ApiErrorEvent) error {
-			if e.HttpContext.Response().Committed {
-				return nil
-			}
-
-			// @see https://github.com/labstack/echo/issues/608
-			if e.HttpContext.Request().Method == http.MethodHead {
-				return e.HttpContext.NoContent(apiErr.Code)
-			}
-
-			return e.HttpContext.JSON(apiErr.Code, apiErr)
-		})
-
-		if hookErr == nil {
-			if err := app.OnAfterApiError().Trigger(event); err != nil {
-				app.Logger().Debug("OnAfterApiError failure", slog.String("error", err.Error()))
-			}
-		} else {
-			app.Logger().Debug("OnBeforeApiError error (truly rare case, eg. client already disconnected)", slog.String("error", hookErr.Error()))
-		}
-	}
-
 	// admin ui routes
 	bindStaticAdminUI(app, e)
 
@@ -128,11 +72,6 @@ func InitApi(app core.App) (*echo.Echo, error) {
 	bindLogsApi(app, api)
 	bindHealthApi(app, api)
 	bindBackupApi(app, api)
-
-	// catch all any route
-	api.Any("/*", func(c echo.Context) error {
-		return echo.ErrNotFound
-	}, ActivityLogger(app))
 
 	return e, nil
 }
