@@ -121,8 +121,18 @@ class AppAuthStore extends LocalAuthStore {
     }
 }
 
+function getAndCacheBackendURL(fallback = import.meta.env.PB_BACKEND_URL) {
+    // parse query string ?baseUrl=https://api.example.com
+    // fallback to the default value import.meta.env.PB_BACKEND_URL
+    const url = new URL(window.location.href);
+    const baseUrl = url.searchParams.get("baseUrl") || localStorage.getItem("pb_backend_url") || fallback;
+    // cache the backend URL
+    localStorage.setItem("pb_backend_url", baseUrl);
+    return baseUrl;
+}
+
 const pb = new PocketBase(
-    import.meta.env.PB_BACKEND_URL,
+    getAndCacheBackendURL(),
     new AppAuthStore("pb_admin_auth")
 );
 
