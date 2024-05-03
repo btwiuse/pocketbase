@@ -75,8 +75,9 @@ release:
   draft: true
 
 archives:
-  - id: archive_noncgo
-    builds: [build_noncgo]
+  - id: archive_noncgo_pocket
+    builds:
+      - build_noncgo_pocket
     format: zip
     files:
       - LICENSE.md
