@@ -25,8 +25,8 @@ require (
 	github.com/pocketbase/tygoja v0.0.0-20241015175937-d6ff411a0f75
 	github.com/spf13/cast v1.7.0
 	github.com/spf13/cobra v1.8.1
-	github.com/webteleport/relay v0.4.12
-	github.com/webteleport/utils v0.2.14
+	github.com/webteleport/relay v0.4.21
+	github.com/webteleport/utils v0.2.15
 	gocloud.dev v0.40.0
 	golang.org/x/crypto v0.29.0
 	golang.org/x/net v0.31.0
@@ -50,6 +50,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sso v1.24.7 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.28.6 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.33.2 // indirect
+	github.com/btwiuse/connect v0.0.5 // indirect
 	github.com/btwiuse/rng v0.0.0 // indirect
 	github.com/btwiuse/tags v0.0.2 // indirect
 	github.com/btwiuse/wsconn v0.0.1 // indirect
@@ -59,8 +60,6 @@ require (
 	github.com/docker/docker v25.0.1+incompatible // indirect
 	github.com/dop251/base64dec v0.0.0-20231022112746-c6c9f9a96217 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
-	github.com/elazarl/goproxy v0.0.0-20231117061959-7cc037d33fb5 // indirect
-	github.com/elazarl/goproxy/ext v0.0.0-20231117061959-7cc037d33fb5 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.4+incompatible // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
@@ -86,13 +85,12 @@ require (
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/onsi/ginkgo/v2 v2.12.0 // indirect
 	github.com/quic-go/qpack v0.4.0 // indirect
-	github.com/quic-go/quic-go v0.42.0 // indirect
-	github.com/quic-go/webtransport-go v0.7.0 // indirect
+	github.com/quic-go/quic-go v0.43.0 // indirect
+	github.com/quic-go/webtransport-go v0.8.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rs/cors v1.10.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/webteleport/transport v0.0.0 // indirect
-	github.com/webteleport/webteleport v0.5.16 // indirect
+	github.com/webteleport/webteleport v0.5.27 // indirect
 	github.com/zeebo/blake3 v0.2.3 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.uber.org/mock v0.4.0 // indirect
