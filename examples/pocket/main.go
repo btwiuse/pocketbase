@@ -10,6 +10,7 @@ import (
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
+	"github.com/pocketbase/pocketbase/plugins/ghupdate"
 	"github.com/webteleport/relay"
 )
 
@@ -23,6 +24,13 @@ func Run(args []string) error {
 	app := pocketbase.New()
 
 	app.RootCmd.ParseFlags(args)
+
+	// GitHub selfupdate
+	ghupdate.MustRegister(app, app.RootCmd, ghupdate.Config{
+		Owner: "btwiuse",
+		Repo: "pocketbase",
+		ArchiveExecutable: "pocket",
+	})
 
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		app.Logger().Info("starting the relay server", "HOST", apis.HOST)
