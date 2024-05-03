@@ -6,17 +6,23 @@ import (
 	"os"
 	"strings"
 
-	"github.com/pocketbase/pocketbase"
 	"github.com/labstack/echo/v5"
+	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/webteleport/relay"
 )
 
 func main() {
+	if err := Run(os.Args[1:]); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func Run(args []string) error {
 	app := pocketbase.New()
 
-	app.RootCmd.ParseFlags(os.Args[1:])
+	app.RootCmd.ParseFlags(args)
 
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		app.Logger().Info("starting the relay server", "HOST", apis.HOST)
@@ -51,7 +57,5 @@ func main() {
 		return nil
 	})
 
-	if err := app.Start(); err != nil {
-		log.Fatal(err)
-	}
+	return app.Start()
 }
