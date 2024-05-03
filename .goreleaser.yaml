@@ -72,7 +72,7 @@ builds:
         goarch: arm
 
 release:
-  draft: true
+  draft: false
 
 archives:
   - id: archive_noncgo_pocket
