@@ -27,7 +27,7 @@ require (
 	github.com/pocketbase/tygoja v0.0.0-20240113091827-17918475d342
 	github.com/spf13/cast v1.6.0
 	github.com/spf13/cobra v1.8.0
-	github.com/webteleport/relay v0.4.21
+	github.com/webteleport/relay v0.4.23
 	github.com/webteleport/utils v0.2.15
 	gocloud.dev v0.37.0
 	golang.org/x/crypto v0.22.0
@@ -56,7 +56,7 @@ require (
 	github.com/btwiuse/connect v0.0.5 // indirect
 	github.com/btwiuse/rng v0.0.0 // indirect
 	github.com/btwiuse/tags v0.0.2 // indirect
-	github.com/btwiuse/wsconn v0.0.1 // indirect
+	github.com/btwiuse/wsconn v0.0.2 // indirect
 	github.com/caddyserver/certmagic v0.20.0 // indirect
 	github.com/digitalocean/godo v1.41.0 // indirect
 	github.com/dlclark/regexp2 v1.10.0 // indirect
@@ -95,7 +95,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	github.com/webteleport/webteleport v0.5.27 // indirect
+	github.com/webteleport/webteleport v0.5.28 // indirect
 	github.com/zeebo/blake3 v0.2.3 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.uber.org/mock v0.4.0 // indirect
