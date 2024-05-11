@@ -27,7 +27,7 @@ require (
 	github.com/pocketbase/tygoja v0.0.0-20240113091827-17918475d342
 	github.com/spf13/cast v1.6.0
 	github.com/spf13/cobra v1.8.0
-	github.com/webteleport/relay v0.4.24
+	github.com/webteleport/relay v0.4.25
 	github.com/webteleport/utils v0.2.15
 	gocloud.dev v0.37.0
 	golang.org/x/crypto v0.22.0
@@ -54,6 +54,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.23.4 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.28.6 // indirect
 	github.com/btwiuse/connect v0.0.5 // indirect
+	github.com/btwiuse/muxr v0.0.1 // indirect
 	github.com/btwiuse/rng v0.0.0 // indirect
 	github.com/btwiuse/tags v0.0.2 // indirect
 	github.com/btwiuse/wsconn v0.0.2 // indirect
