@@ -25,7 +25,7 @@ require (
 	github.com/pocketbase/tygoja v0.0.0-20241015175937-d6ff411a0f75
 	github.com/spf13/cast v1.7.0
 	github.com/spf13/cobra v1.8.1
-	github.com/webteleport/relay v0.4.25
+	github.com/webteleport/relay v0.4.26
 	github.com/webteleport/utils v0.2.15
 	gocloud.dev v0.40.0
 	golang.org/x/crypto v0.29.0

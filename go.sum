@@ -261,8 +261,8 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
-github.com/webteleport/relay v0.4.25 h1:2VndrBXYcAA272wSpRf80XdyBgPTn1AMkw9pVzUXVxQ=
-github.com/webteleport/relay v0.4.25/go.mod h1:Mk8G2wuDdfBiaugTTreEDxvBGKTQcOjEz1rBjAud+ik=
+github.com/webteleport/relay v0.4.26 h1:clEbALxnezt012FOvYwPJGxCExKnFm8fr8P94ZzYasM=
+github.com/webteleport/relay v0.4.26/go.mod h1:Mk8G2wuDdfBiaugTTreEDxvBGKTQcOjEz1rBjAud+ik=
 github.com/webteleport/utils v0.2.15 h1:X9k/sZmq1iEF5tVuAP8dxb+VuIdJ5SPLtPTwcBRXfzs=
 github.com/webteleport/utils v0.2.15/go.mod h1:si5mpiKa/VTH45LAMARPMBOK6snyFGG+qh+TEQGJTG8=
 github.com/webteleport/webteleport v0.5.28 h1:8fgCQAXH0LGsgBzeGEhBg84Cj0RNAv7ka5Rbv2kDhFI=
