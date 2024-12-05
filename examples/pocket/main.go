@@ -39,7 +39,7 @@ func Run(args []string) error {
 
 		withRelay := func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				isPocketbaseHost := mini.IsRoot(r)
+				isPocketbaseHost := mini.IsRootExternal(r)
 				isPocketbaseAPI := strings.HasPrefix(r.URL.Path, "/api/")
 				isPocketbase := isPocketbaseHost && isPocketbaseAPI
 
