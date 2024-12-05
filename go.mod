@@ -1,6 +1,6 @@
 module github.com/pocketbase/pocketbase
 
-go 1.23.2
+go 1.23.3
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
@@ -27,7 +27,7 @@ require (
 	github.com/pocketbase/tygoja v0.0.0-20240113091827-17918475d342
 	github.com/spf13/cast v1.6.0
 	github.com/spf13/cobra v1.8.0
-	github.com/webteleport/relay v0.4.35
+	github.com/webteleport/relay v0.4.41
 	github.com/webteleport/utils v0.2.16
 	gocloud.dev v0.37.0
 	golang.org/x/crypto v0.28.0
@@ -56,11 +56,9 @@ require (
 	github.com/btwiuse/connect v0.0.5 // indirect
 	github.com/btwiuse/forward v0.0.0 // indirect
 	github.com/btwiuse/muxr v0.0.1 // indirect
-	github.com/btwiuse/rng v0.0.1 // indirect
 	github.com/btwiuse/tags v0.0.2 // indirect
 	github.com/btwiuse/wsconn v0.0.3 // indirect
 	github.com/dlclark/regexp2 v1.10.0 // indirect
-	github.com/docker/docker v27.3.1+incompatible // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
@@ -83,14 +81,14 @@ require (
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/onsi/ginkgo/v2 v2.12.0 // indirect
 	github.com/quic-go/qpack v0.5.1 // indirect
-	github.com/quic-go/quic-go v0.48.1 // indirect
+	github.com/quic-go/quic-go v0.48.2 // indirect
 	github.com/quic-go/webtransport-go v0.8.1-0.20241018022711-4ac2c9250e66 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rs/cors v1.11.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	github.com/webteleport/webteleport v0.5.34 // indirect
+	github.com/webteleport/webteleport v0.5.36 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.uber.org/mock v0.4.0 // indirect
 	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c // indirect
