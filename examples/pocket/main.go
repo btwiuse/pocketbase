@@ -59,7 +59,6 @@ func Run(args []string) error {
 		}
 
 		e.Router.Pre(
-			apis.ActivityLogger(app),
 			echo.WrapMiddleware(withRelay),
 		)
 		return nil
