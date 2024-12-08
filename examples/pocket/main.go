@@ -2,15 +2,14 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"os"
 	"strings"
 
-	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/ghupdate"
+	"github.com/pocketbase/pocketbase/tools/hook"
 	"github.com/webteleport/relay"
 )
 
@@ -27,41 +26,37 @@ func Run(args []string) error {
 
 	// GitHub selfupdate
 	ghupdate.MustRegister(app, app.RootCmd, ghupdate.Config{
-		Owner: "btwiuse",
-		Repo: "pocketbase",
+		Owner:             "btwiuse",
+		Repo:              "pocketbase",
 		ArchiveExecutable: "pocket",
 	})
 
-	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		app.Logger().Info("starting the relay server", "HOST", apis.HOST)
-		store := relay.NewSessionStore()
-		mini := relay.NewWSServer(apis.HOST, store)
+	// registers the relay middleware
+	app.OnServe().Bind(&hook.Handler[*core.ServeEvent]{
+		Func: func(se *core.ServeEvent) error {
+			log.Println("starting the relay server", "HOST", apis.HOST)
 
-		withRelay := func(next http.Handler) http.Handler {
-			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				isPocketbaseHost := mini.IsRootExternal(r)
-				isPocketbaseAPI := strings.HasPrefix(r.URL.Path, "/api/")
-				isPocketbase := isPocketbaseHost && isPocketbaseAPI
+			store := relay.NewSessionStore()
+			mini := relay.NewWSServer(apis.HOST, store)
 
-				if os.Getenv("POCKETBASE_UI") != "" {
-					isPocketbaseUI := strings.HasPrefix(r.URL.Path, "/_/")
-					isPocketbase = isPocketbaseHost && (isPocketbaseAPI || isPocketbaseUI)
-				}
+			se.Router.BindFunc(func(re *core.RequestEvent) error {
+				isPocketbaseHost := mini.IsRootExternal(re.Event.Request)
+				isPocketbaseAPI := strings.HasPrefix(re.Event.Request.URL.Path, "/api/")
+				isPocketbaseUI := strings.HasPrefix(re.Event.Request.URL.Path, "/_/")
+				isPocketbase := isPocketbaseHost && (isPocketbaseAPI || isPocketbaseUI)
 
 				// route non pocketbase requests to relay
 				if !isPocketbase {
-					mini.ServeHTTP(w, r)
-					return
+					mini.ServeHTTP(re.Event.Response, re.Event.Request)
+					return nil
 				}
 
-				next.ServeHTTP(w, r)
+				return re.Next()
 			})
-		}
 
-		e.Router.Pre(
-			echo.WrapMiddleware(withRelay),
-		)
-		return nil
+			return se.Next()
+		},
+		Priority: -99999, // execute as early as possible
 	})
 
 	return app.Start()
