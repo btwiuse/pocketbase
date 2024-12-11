@@ -43,5 +43,8 @@ func Run(args []string) error {
 	// registers the relay middleware
 	app.OnServe().Bind(RelayHook)
 
+	// registers the gitd middleware
+	app.OnServe().Bind(GitdHook)
+
 	return app.Start()
 }
